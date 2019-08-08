@@ -19,11 +19,16 @@ public class DueDateCalculatorTest {
 
     private static final LocalDate MONDAY = LocalDate.of(2019, 8, 5);
     private static final LocalDateTime MONDAY_WORK_START = LocalDateTime.of(MONDAY, WORK_START);
+    private static final LocalDateTime MONDAY_NOON = LocalDateTime.of(MONDAY, LocalTime.NOON);
     private static final LocalDateTime MONDAY_WORK_END = LocalDateTime.of(MONDAY, WORK_END);
 
     private static final LocalDate TUESDAY = MONDAY.plusDays(1L);
     private static final LocalDateTime TUESDAY_WORK_START = LocalDateTime.of(TUESDAY, WORK_START);
+    private static final LocalDateTime TUESDAY_NOON = LocalDateTime.of(TUESDAY, LocalTime.NOON);
     private static final LocalDateTime TUESDAY_WORK_END = LocalDateTime.of(TUESDAY, WORK_END);
+
+    private static final LocalDate FRIDAY = MONDAY.plusDays(4L);
+    private static final LocalDateTime FRIDAY_WORK_START = LocalDateTime.of(FRIDAY, WORK_START);
 
     private static final LocalDateTime EXPECTED_DUE_DATE_MONDAY_WORK_START_ZERO_TURNAROUND =
             MONDAY_WORK_START;
@@ -31,8 +36,12 @@ public class DueDateCalculatorTest {
             MONDAY_WORK_START.plusHours(1L);
     private static final LocalDateTime EXPECTED_DUE_DATE_MONDAY_WORK_START_ENTIRE_WORKDAY_TURNAROUND =
             TUESDAY_WORK_START;
+    private static final LocalDateTime EXPECTED_DUE_DATE_MONDAY_NOON_ENTIRE_WORKDAY_TURNAROUND =
+            TUESDAY_NOON;
     private static final LocalDateTime EXPECTED_DUE_DATE_MONDAY_WORK_END_ENTIRE_WORKDAY_TURNAROUND =
             TUESDAY_WORK_END;
+    private static final LocalDateTime EXPECTED_DUE_DATE_FRIDAY_WORK_START_ENTIRE_WORKDAY_TURNAROUND =
+            MONDAY_WORK_START;
 
     private final DueDateCalculator underTest = new DueDateCalculator();
 
@@ -58,9 +67,23 @@ public class DueDateCalculatorTest {
     }
 
     @Test
+    public void testCalculateDueDateShouldReturnNoonNextDayWhenCreatedAtNoonAndTurnaroundTimeIsEntireWorkday() {
+        LocalDateTime actual = underTest.calculateDueDate(MONDAY_NOON, TURNAROUND_TIME_ENTIRE_WORKDAY);
+
+        assertEquals(EXPECTED_DUE_DATE_MONDAY_NOON_ENTIRE_WORKDAY_TURNAROUND, actual);
+    }
+
+    @Test
     public void testCalculateDueDateShouldReturnWorkEndNextDayWhenCreatedAtWorkEndAndTurnaroundTimeIsEntireWorkday() {
         LocalDateTime actual = underTest.calculateDueDate(MONDAY_WORK_END, TURNAROUND_TIME_ENTIRE_WORKDAY);
 
         assertEquals(EXPECTED_DUE_DATE_MONDAY_WORK_END_ENTIRE_WORKDAY_TURNAROUND, actual);
+    }
+
+    @Test
+    public void testCalculateDueDateShouldReturnWorkStartMondayWhenCreatedAtWorkEndStartFridayTurnaroundTimeIsEntireWorkday() {
+        LocalDateTime actual = underTest.calculateDueDate(FRIDAY_WORK_START, TURNAROUND_TIME_ENTIRE_WORKDAY);
+
+        assertEquals(EXPECTED_DUE_DATE_FRIDAY_WORK_START_ENTIRE_WORKDAY_TURNAROUND, actual);
     }
 }
