@@ -4,23 +4,8 @@ import java.time.LocalDateTime;
 
 class DueDateCalculator {
 
-    private final LocalDateTimeValidator localDateTimeValidator;
-    private final TurnaroundTimeValidator turnaroundTimeValidator;
-    private final CreatedDuringWorkingHoursValidator createdDuringWorkingHoursValidator;
+    LocalDateTime calculateDueDate(LocalDateTime creationDateTime, int turnaroundTimeInHours) {
 
-    DueDateCalculator(LocalDateTimeValidator localDateTimeValidator, TurnaroundTimeValidator turnaroundTimeValidator, CreatedDuringWorkingHoursValidator createdDuringWorkingHoursValidator) {
-        this.localDateTimeValidator = localDateTimeValidator;
-        this.turnaroundTimeValidator = turnaroundTimeValidator;
-        this.createdDuringWorkingHoursValidator = createdDuringWorkingHoursValidator;
-    }
-
-    LocalDateTime calculateDueDate(String creationDateTimeString, int turnaroundTimeInHours) {
-        localDateTimeValidator.validate(creationDateTimeString);
-        turnaroundTimeValidator.validate(turnaroundTimeInHours);
-
-        LocalDateTime creationDateTime = LocalDateTime.parse(creationDateTimeString);
-        createdDuringWorkingHoursValidator.validate(creationDateTime);
-
-        return creationDateTime;
+        return creationDateTime.plusHours((long) turnaroundTimeInHours);
     }
 }
