@@ -5,26 +5,30 @@ import java.time.LocalDateTime;
 class DueDateCalculator {
 
     LocalDateTime calculateDueDate(String creationDateTime, int turnaroundTimeInHours) {
-        assertCreationDateTimeIsNotNull(creationDateTime);
-        assertCreationDateTimeIsNotEmpty(creationDateTime);
-        parseCreationDateTime(creationDateTime);
+        assertLocalDateTimeNotNullNotEmpty(creationDateTime);
+        parseLocalDateTime(creationDateTime);
 
         return null;
     }
 
-    private void assertCreationDateTimeIsNotNull(String creationDateTime) {
-        if (creationDateTime == null) {
-            throw new IllegalArgumentException("creationDateTime must not be null!");
+    private void assertLocalDateTimeNotNullNotEmpty(String localDateTime) {
+        assertLocalDateTimeIsNotNull(localDateTime);
+        assertCreationDateTimeIsNotEmpty(localDateTime);
+    }
+
+    private void assertLocalDateTimeIsNotNull(String localDateTime) {
+        if (localDateTime == null) {
+            throw new IllegalArgumentException("localDateTime must not be null!");
         }
     }
 
-    private void assertCreationDateTimeIsNotEmpty(String creationDateTime) {
-        if (creationDateTime.length() == 0) {
-            throw new IllegalArgumentException("creationDateTime must not be empty!");
+    private void assertCreationDateTimeIsNotEmpty(String localDateTime) {
+        if (localDateTime.length() == 0) {
+            throw new IllegalArgumentException("localDateTime must not be empty!");
         }
     }
 
-    private LocalDateTime parseCreationDateTime(String creationDateTime) {
-        return LocalDateTime.parse(creationDateTime);
+    private LocalDateTime parseLocalDateTime(String localDateTime) {
+        return LocalDateTime.parse(localDateTime);
     }
 }
