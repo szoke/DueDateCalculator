@@ -10,4 +10,9 @@ public class DueDateCalculatorTest {
     public void testCalculateDueDateShouldThrowExceptionWhenCreationDateTimeIsNull() {
         underTest.calculateDueDate(null, 1);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCalculateDueDateShouldThrowExceptionWhenCreationDateTimeIsEmpty() {
+        underTest.calculateDueDate("", 1);
+    }
 }
