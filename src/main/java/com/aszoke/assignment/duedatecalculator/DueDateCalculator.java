@@ -7,6 +7,7 @@ class DueDateCalculator {
     LocalDateTime calculateDueDate(String creationDateTime, int turnaroundTimeInHours) {
         assertCreationDateTimeIsNotNull(creationDateTime);
         assertCreationDateTimeIsNotEmpty(creationDateTime);
+        parseCreationDateTime(creationDateTime);
 
         return null;
     }
@@ -21,5 +22,9 @@ class DueDateCalculator {
         if (creationDateTime.length() == 0) {
             throw new IllegalArgumentException("creationDateTime must not be empty!");
         }
+    }
+
+    private LocalDateTime parseCreationDateTime(String creationDateTime) {
+        return LocalDateTime.parse(creationDateTime);
     }
 }

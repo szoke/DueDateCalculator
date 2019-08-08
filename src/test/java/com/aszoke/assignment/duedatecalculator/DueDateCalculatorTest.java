@@ -2,6 +2,8 @@ package com.aszoke.assignment.duedatecalculator;
 
 import org.junit.Test;
 
+import java.time.format.DateTimeParseException;
+
 public class DueDateCalculatorTest {
 
     private DueDateCalculator underTest = new DueDateCalculator();
@@ -16,7 +18,7 @@ public class DueDateCalculatorTest {
         underTest.calculateDueDate("", 1);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = DateTimeParseException.class)
     public void testCalculateDueDateShouldThrowExceptionWhenCreationDateTimeCannotBeParsed() {
         underTest.calculateDueDate("asd987", 1);
     }
