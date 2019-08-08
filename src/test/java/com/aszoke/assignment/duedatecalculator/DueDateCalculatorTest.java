@@ -22,4 +22,13 @@ public class DueDateCalculatorTest {
     public void testCalculateDueDateShouldThrowExceptionWhenCreationDateTimeCannotBeParsed() {
         underTest.calculateDueDate("asd987", 1);
     }
+
+    // How do you know if the exception was thrown because the turnaround time is negative or
+    // because the creation date-time cannot be parsed? The class under test is doing do much
+    // already and violates the single responsibility principle.
+    // We could assert the message in the exception but that may make the test too rigid.
+    @Test(expected = IllegalArgumentException.class)
+    public void testCalculateDueDateShouldThrowExceptionWhenTurnAroundTimeIsNegative() {
+        underTest.calculateDueDate("2019-08-08T12:22:33", -1);
+    }
 }

@@ -6,6 +6,8 @@ class DueDateCalculator {
 
     LocalDateTime calculateDueDate(String creationDateTime, int turnaroundTimeInHours) {
         assertLocalDateTimeNotNullNotEmpty(creationDateTime);
+        assertNonNegative(turnaroundTimeInHours);
+
         parseLocalDateTime(creationDateTime);
 
         return null;
@@ -25,6 +27,12 @@ class DueDateCalculator {
     private void assertCreationDateTimeIsNotEmpty(String localDateTime) {
         if (localDateTime.length() == 0) {
             throw new IllegalArgumentException("localDateTime must not be empty!");
+        }
+    }
+
+    private void assertNonNegative(int value) {
+        if (value < 0) {
+            throw new IllegalArgumentException("Value must be greater or equal to 0.");
         }
     }
 
