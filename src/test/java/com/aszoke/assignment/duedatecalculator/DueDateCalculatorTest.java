@@ -30,6 +30,9 @@ public class DueDateCalculatorTest {
     private static final LocalDate FRIDAY = MONDAY.plusDays(4L);
     private static final LocalDateTime FRIDAY_WORK_START = LocalDateTime.of(FRIDAY, WORK_START);
 
+    private static final LocalDate NEXT_MONDAY = MONDAY.plusWeeks(1L);
+    private static final LocalDateTime NEXT_MONDAY_WORK_START = LocalDateTime.of(NEXT_MONDAY, WORK_START);
+
     private static final LocalDateTime EXPECTED_DUE_DATE_MONDAY_WORK_START_ZERO_TURNAROUND =
             MONDAY_WORK_START;
     private static final LocalDateTime EXPECTED_DUE_DATE_MONDAY_WORK_START_ONE_HOUR_TURNAROUND =
@@ -41,7 +44,7 @@ public class DueDateCalculatorTest {
     private static final LocalDateTime EXPECTED_DUE_DATE_MONDAY_WORK_END_ENTIRE_WORKDAY_TURNAROUND =
             TUESDAY_WORK_END;
     private static final LocalDateTime EXPECTED_DUE_DATE_FRIDAY_WORK_START_ENTIRE_WORKDAY_TURNAROUND =
-            MONDAY_WORK_START;
+            NEXT_MONDAY_WORK_START;
 
     private final DueDateCalculator underTest = new DueDateCalculator();
 
