@@ -21,12 +21,15 @@ public class DueDateCalculatorTest {
     private static final LocalDateTime MONDAY_WORK_START = LocalDateTime.of(MONDAY, WORK_START);
     private static final LocalDateTime MONDAY_WORK_END = LocalDateTime.of(MONDAY, WORK_END);
 
+    private static final LocalDate TUESDAY = MONDAY.plusDays(1L);
+    private static final LocalDateTime TUESDAY_WORK_START = LocalDateTime.of(TUESDAY, WORK_START);
+
     private static final LocalDateTime EXPECTED_DUE_DATE_MONDAY_WORK_START_ZERO_TURNAROUND =
             MONDAY_WORK_START;
     private static final LocalDateTime EXPECTED_DUE_DATE_MONDAY_WORK_START_ONE_HOUR_TURNAROUND =
             MONDAY_WORK_START.plusHours(1L);
     private static final LocalDateTime EXPECTED_DUE_DATE_MONDAY_WORK_START_ENTIRE_WORKDAY_TURNAROUND =
-            MONDAY_WORK_END;
+            TUESDAY_WORK_START;
 
     private final DueDateCalculator underTest = new DueDateCalculator();
 
@@ -45,7 +48,7 @@ public class DueDateCalculatorTest {
     }
 
     @Test
-    public void testCalculateDueDateShouldReturnWorkEndWhenTurnaroundTimeIsDurationOfWorkday() {
+    public void testCalculateDueDateShouldReturnWorkStartNextDayWhenCreatedAtWorkStartAndTurnaroundTimeIsEntireWorkday() {
         LocalDateTime actual = underTest.calculateDueDate(MONDAY_WORK_START, TURNAROUND_TIME_ENTIRE_WORKDAY);
 
         assertEquals(EXPECTED_DUE_DATE_MONDAY_WORK_START_ENTIRE_WORKDAY_TURNAROUND, actual);
