@@ -16,6 +16,6 @@ class DueDateCalculator {
         localDateTimeValidator.validate(creationDateTime);
         turnaroundTimeValidator.validate(turnaroundTimeInHours);
 
-        return null;
+        return LocalDateTime.parse(creationDateTime);
     }
 }
