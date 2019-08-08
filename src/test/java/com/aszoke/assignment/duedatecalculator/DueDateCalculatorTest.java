@@ -22,6 +22,8 @@ public class DueDateCalculatorTest {
     private LocalDateTimeValidator localDateTimeValidator;
     @Mock
     private TurnaroundTimeValidator turnaroundTimeValidator;
+    @Mock
+    private CreatedDuringWorkingHoursValidator createdDuringWorkingHoursValidator;
 
     @InjectMocks
     private DueDateCalculator underTest;
@@ -40,6 +42,7 @@ public class DueDateCalculatorTest {
 
         verify(localDateTimeValidator).validate(testCreationDateTime);
         verifyZeroInteractions(turnaroundTimeValidator);
+        verifyZeroInteractions(createdDuringWorkingHoursValidator);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -53,6 +56,21 @@ public class DueDateCalculatorTest {
 
         verify(localDateTimeValidator).validate(testCreationDateTime);
         verify(turnaroundTimeValidator).validate(testTurnaroundTime);
+        verifyZeroInteractions(createdDuringWorkingHoursValidator);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCalculateDueDateShouldThrowExceptionWhenCreatedDuringWorkingHoursValidationFails() {
+        doNothing().when(localDateTimeValidator).validate(TEST_CREATION_DATE_TIME_AS_STRING);
+        doNothing().when(turnaroundTimeValidator).validate(TEST_TURNAROUND_TIME_ZERO);
+        doThrow(new IllegalArgumentException()).when(createdDuringWorkingHoursValidator)
+                .validate(TEST_CREATION_DATE_TIME_AS_LOCAL_DATE_TIME);
+
+        underTest.calculateDueDate(TEST_CREATION_DATE_TIME_AS_STRING, 1);
+
+        verify(localDateTimeValidator).validate(TEST_CREATION_DATE_TIME_AS_STRING);
+        verify(turnaroundTimeValidator).validate(TEST_TURNAROUND_TIME_ZERO);
+        verify(createdDuringWorkingHoursValidator).validate(TEST_CREATION_DATE_TIME_AS_LOCAL_DATE_TIME);
     }
 
     @Test
@@ -61,17 +79,20 @@ public class DueDateCalculatorTest {
 
         LocalDateTime actual = underTest.calculateDueDate(TEST_CREATION_DATE_TIME_AS_STRING, TEST_TURNAROUND_TIME_ZERO);
 
-        verifyInputValidated(TEST_CREATION_DATE_TIME_AS_STRING, TEST_TURNAROUND_TIME_ZERO);
+        verifyInputValidated(TEST_CREATION_DATE_TIME_AS_STRING, TEST_TURNAROUND_TIME_ZERO, TEST_CREATION_DATE_TIME_AS_LOCAL_DATE_TIME);
         assertEquals(TEST_CREATION_DATE_TIME_AS_LOCAL_DATE_TIME, actual);
     }
 
     private void givenValidInputParameters() {
         doNothing().when(localDateTimeValidator).validate(anyString());
         doNothing().when(turnaroundTimeValidator).validate(anyInt());
+        doNothing().when(createdDuringWorkingHoursValidator).validate(any(LocalDateTime.class));
     }
 
-    private void verifyInputValidated(String testCreationDateTime, int testTurnaroundTime) {
-        verify(localDateTimeValidator).validate(testCreationDateTime);
+    private void verifyInputValidated(String testCreationDateTimeString, int testTurnaroundTime,
+                                      LocalDateTime testCreationDateTime) {
+        verify(localDateTimeValidator).validate(testCreationDateTimeString);
         verify(turnaroundTimeValidator).validate(testTurnaroundTime);
+        verify(createdDuringWorkingHoursValidator).validate(testCreationDateTime);
     }
 }

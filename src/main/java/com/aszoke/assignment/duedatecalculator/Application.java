@@ -5,7 +5,10 @@ import java.time.LocalDateTime;
 public class Application {
 
     public static void main(String[] args) {
-        DueDateCalculator dueDateCalculator = new DueDateCalculator(new LocalDateTimeValidator(), new TurnaroundTimeValidator());
+        DueDateCalculator dueDateCalculator = new DueDateCalculator(
+                new LocalDateTimeValidator(),
+                new TurnaroundTimeValidator(),
+                new CreatedDuringWorkingHoursValidator());
 
         String creationDateTime = "2019-08-08T16:22:44";
 
