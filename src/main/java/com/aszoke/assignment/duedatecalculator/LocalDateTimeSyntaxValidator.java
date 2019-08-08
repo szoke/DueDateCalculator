@@ -2,7 +2,7 @@ package com.aszoke.assignment.duedatecalculator;
 
 import java.time.LocalDateTime;
 
-class LocalDateTimeValidator {
+class LocalDateTimeSyntaxValidator {
 
     void validate(String localDateTime) {
         assertLocalDateTimeIsNotNull(localDateTime);

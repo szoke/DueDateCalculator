@@ -4,25 +4,23 @@ import java.time.LocalDateTime;
 
 public class Application {
 
-    private static final LocalDateTimeValidator localDateTimeValidator = new LocalDateTimeValidator();
-    private static final TurnaroundTimeValidator turnaroundTimeValidator = new TurnaroundTimeValidator();
-    private static final CreatedDuringWorkingHoursValidator createdDuringWorkingHoursValidator = new CreatedDuringWorkingHoursValidator();
-
     public static void main(String[] args) {
+        // In real world the parameters could come from command line args, file, networks, etc.
         String creationDateTimeString = "2019-08-08T16:22:44";
-        int turnaroundTimeInMinutes = 1;
+        int turnaroundTimeInHours = 9;
 
-        localDateTimeValidator.validate(creationDateTimeString);
-        turnaroundTimeValidator.validate(turnaroundTimeInMinutes);
-        LocalDateTime creationDateTime = LocalDateTime.parse(creationDateTimeString);
-        createdDuringWorkingHoursValidator.validate(creationDateTime);
+        // In real world we probably use a DI framework
+        DueDateCalculator dueDateCalculator = new DueDateCalculator(
+                new LocalDateTimeSyntaxValidator(),
+                new TurnaroundTimeValidator(),
+                new CreatedDuringWorkingHoursValidator(),
+                new Calculator());
 
-        DueDateCalculator dueDateCalculator = new DueDateCalculator();
+        LocalDateTime dueDateTime = dueDateCalculator.calculateDueDate(creationDateTimeString, turnaroundTimeInHours);
 
-        LocalDateTime dueDateTime = dueDateCalculator.calculateDueDate(creationDateTime, turnaroundTimeInMinutes);
-
-        System.out.println(String.format("Task created at %s is due at %s.",
-                creationDateTime,
+        System.out.println(String.format("Task created at %s with turnaroung time of %d hours is due at %s.",
+                creationDateTimeString,
+                turnaroundTimeInHours,
                 dueDateTime));
     }
 }

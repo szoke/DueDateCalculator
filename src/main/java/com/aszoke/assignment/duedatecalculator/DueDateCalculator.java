@@ -1,40 +1,28 @@
 package com.aszoke.assignment.duedatecalculator;
 
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 
 class DueDateCalculator {
 
-    private static final int WORKDAY_LENGTH_IN_HOURS = 8;
+    private final LocalDateTimeSyntaxValidator localDateTimeSyntaxValidator;
+    private final TurnaroundTimeValidator turnaroundTimeValidator;
+    private final CreatedDuringWorkingHoursValidator createdDuringWorkingHoursValidator;
+    private final Calculator calculator;
 
-    LocalDateTime calculateDueDate(LocalDateTime creationDateTime, int turnaroundTimeInHours) {
-        int workDays = getWorkDays(turnaroundTimeInHours);
-        int hoursInPartialWorkday = getHoursInPartialWorkDay(turnaroundTimeInHours);
-
-        LocalDateTime dueDateTime = creationDateTime;
-        while (workDays > 0) {
-            dueDateTime = getNextWorkDay(dueDateTime);
-            workDays--;
-        }
-
-        return dueDateTime.plusHours(hoursInPartialWorkday);
+    DueDateCalculator(LocalDateTimeSyntaxValidator localDateTimeSyntaxValidator, TurnaroundTimeValidator turnaroundTimeValidator,
+                      CreatedDuringWorkingHoursValidator createdDuringWorkingHoursValidator, Calculator calculator) {
+        this.localDateTimeSyntaxValidator = localDateTimeSyntaxValidator;
+        this.turnaroundTimeValidator = turnaroundTimeValidator;
+        this.createdDuringWorkingHoursValidator = createdDuringWorkingHoursValidator;
+        this.calculator = calculator;
     }
 
-    private LocalDateTime getNextWorkDay(LocalDateTime localDateTime) {
-        if (localDateTime.getDayOfWeek().equals(DayOfWeek.FRIDAY)) {
-            return localDateTime.plusDays(3L);
-        } else if (localDateTime.getDayOfWeek().equals(DayOfWeek.SATURDAY)) {
-            return localDateTime.plusDays(2L);
-        } else {
-            return localDateTime.plusDays(1L);
-        }
-    }
+    LocalDateTime calculateDueDate(String creationDateTimeString, int turnaroundTimeInHours) {
+        localDateTimeSyntaxValidator.validate(creationDateTimeString);
+        turnaroundTimeValidator.validate(turnaroundTimeInHours);
+        LocalDateTime creationDateTime = LocalDateTime.parse(creationDateTimeString);
+        createdDuringWorkingHoursValidator.validate(creationDateTime);
 
-    private int getWorkDays(int totalHours) {
-        return totalHours / WORKDAY_LENGTH_IN_HOURS;
-    }
-
-    private int getHoursInPartialWorkDay(int totalHours) {
-        return totalHours % WORKDAY_LENGTH_IN_HOURS;
+        return calculator.calculateDueDate(creationDateTime, turnaroundTimeInHours);
     }
 }

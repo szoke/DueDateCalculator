@@ -4,9 +4,9 @@ import org.junit.Test;
 
 import java.time.format.DateTimeParseException;
 
-public class LocalDateTimeValidatorTest {
+public class LocalDateTimeSyntaxValidatorTest {
 
-    private final LocalDateTimeValidator underTest = new LocalDateTimeValidator();
+    private final LocalDateTimeSyntaxValidator underTest = new LocalDateTimeSyntaxValidator();
 
     @Test(expected = IllegalArgumentException.class)
     public void testValidateShouldThrowExceptionWhenCreationDateTimeIsNull() {
