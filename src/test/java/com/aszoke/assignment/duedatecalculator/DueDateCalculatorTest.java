@@ -15,4 +15,9 @@ public class DueDateCalculatorTest {
     public void testCalculateDueDateShouldThrowExceptionWhenCreationDateTimeIsEmpty() {
         underTest.calculateDueDate("", 1);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCalculateDueDateShouldThrowExceptionWhenCreationDateTimeCannotBeParsed() {
+        underTest.calculateDueDate("asd987", 1);
+    }
 }
